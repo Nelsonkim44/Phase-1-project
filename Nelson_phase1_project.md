@@ -1,11 +1,26 @@
 # Essentials of Film Production Industry
 
+# 1. Business Understanding 
 
-```python
 
-```
+# 1.1 Introduction
+The film industry has grown over time and has recently become a key hub of innovation and investment. According to [grandviewresearch]( https://www.grandviewresearch.com/industry-analysis/movies-entertainment-market) the world market value of entertainment and movies is estimated at USD 90.92 billion as at 2021 and further expected to grow at a rate of 7.2% annually up to 2030. Several factors can be attributed to the rising trend of the growth of this sector. Some of them include; an increase in the propensity to buy leisure general increase in population, and disposable incomes. 
+The target market for movie productions is teenagers and middle-age adults aged 18 to 39. Regarding demographics, North America has dominated the market as per the 2021 report by [grandviewresearch]( https://www.grandviewresearch.com/industry-analysis/movies-entertainment-market). Moreover, it is suitable for Microsoft to note other significant players in film production in the world, such as CBS Corporation and CBS Broadcasting Inc, Disney, Sony Corporation, 21st Century Fox, and Viacom Inc. to mention but a few. 
+According to [Box OfficeMojo](https://www.boxofficemojo.com/year/world/?sort=rank&sortDir=asc&ref_=bo_ydw__resort#table) some of the best-performing movies worldwide are The Super Mario Bros. Movie, Guardians of the Galaxy vol. 3, Ant-Man and the Wasp: Quantomania, John Wick: Chapter 4 and Fast X. 
+The intended beneficiary of this work is the Microsoft Company Movie Studio which wants to start engaging in Movie Production Business. Still, the Management needs to gain the requisite knowledge in the field. My client (Microsoft Movie Studio) will benefit from the insights brought out by the data analysis I will perform, as well as the recommendations resulting from the results and findings of the study.
 
-## Importing relevant python libraries
+# 1.2 Problem Statement 
+The movie production business is generally very competitive, capital-intensive, and quite dynamic since its dependent on the preferences of those being entertained. Consequently, Microsoft Movie Studio is faced with the challenge of knowing the budget estimates for venturing into the business, the best-selling movie genres, the venture's return on investment, and other strategies to ensure its investment is successful. 
+This research aims to study the trends in the box office and give valuable insights that will help the Management of the new Microsoft Movie studio. Through statistical analysis, I identify the film genres that are doing well in the market, and best-selling movie themes, highlight audience demographics, analyze market demand, and identify key competitors in the sector. 
+
+
+ # 2. Data Understanding
+
+The datasets used in this project include the following: 'Project data/tn.movie_budgets.csv', 'Project data/tmdb.movies.csv', 'Project data/title.basics.csv' and 'Project data/title.ratings.csv'. 
+
+# 3. Data Analysis
+
+## 3.1 Importing relevant python libraries
 
 
 ```python
@@ -16,9 +31,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 ```
 
-## Data Analysis
-
  Reading the data
+ 
 
 
 ```python
@@ -109,11 +123,59 @@ df.head()
 
 
 
+
+```python
+df.isna().sum()
+```
+
+
+
+
+    primary_title         0
+    original_title        0
+    start_year            0
+    runtime_minutes    7620
+    genres              804
+    averagerating         0
+    numvotes              0
+    Action                0
+    Adult                 0
+    Adventure             0
+    Animation             0
+    Biography             0
+    Comedy                0
+    Crime                 0
+    Documentary           0
+    Drama                 0
+    Family                0
+    Fantasy               0
+    Game-Show             0
+    History               0
+    Horror                0
+    Music                 0
+    Musical               0
+    Mystery               0
+    News                  0
+    Reality-TV            0
+    Romance               0
+    Sci-Fi                0
+    Short                 0
+    Sport                 0
+    Thriller              0
+    War                   0
+    Western               0
+    dtype: int64
+
+
+
+After reading the data and viewing the first five rows and all columns I discover that it is demonstarting different types of movies, their production budget, domestic and worldwide gross profit in US Dollars. I will therefore proceed and analyse which movies have the highest return on investment. 
+
 Calculating the Return on Investment(ROI)
+We first deop the $ sign and then write code for getting the return on investment (ROI) for both domestic and worldwide markets. 
 
 
 ```python
-# Convert the currency columns from string to numeric values
+# Converting currency columns from string to numeric values by dropping the $ sign. 
 df['production_budget'] = df['production_budget'].replace('[\$,]', '', regex=True).astype(float)
 df['domestic_gross'] = df['domestic_gross'].replace('[\$,]', '', regex=True).astype(float)
 df['worldwide_gross'] = df['worldwide_gross'].replace('[\$,]', '', regex=True).astype(float)
@@ -142,6 +204,8 @@ print(df[['movie', 'ROI_domestic', 'ROI_worldwide']])
     
     [5782 rows x 3 columns]
     
+
+We now rank the movies from the one with the highest ROI to the one with the least. 
 
 
 ```python
@@ -1025,13 +1089,29 @@ column_heads = df.columns
 print(column_heads)
 ```
 
-    Index(['primary_title', 'original_title', 'start_year', 'runtime_minutes',
-           'genres', 'averagerating', 'numvotes', 'Action', 'Adult', 'Adventure',
-           'Animation', 'Biography', 'Comedy', 'Crime', 'Documentary', 'Drama',
-           'Family', 'Fantasy', 'Game-Show', 'History', 'Horror', 'Music',
-           'Musical', 'Mystery', 'News', 'Reality-TV', 'Romance', 'Sci-Fi',
-           'Short', 'Sport', 'Thriller', 'War', 'Western'],
-          dtype='object')
+
+```python
+
+# Get the count of each genre
+genre_counts = joined_df['genres'].value_counts()
+
+# Sort the genre counts in descending order
+genre_counts_sorted = genre_counts.sort_values(ascending=False)
+print(genre_counts)
+```
+
+    Drama                        11612
+    Documentary                  10313
+    Comedy                        5613
+    Horror                        2692
+    Comedy,Drama                  2617
+                                 ...  
+    Sport,Thriller                   1
+    Comedy,Sport,Western             1
+    Action,Music                     1
+    Comedy,Sci-Fi,Western            1
+    Documentary,Family,Sci-Fi        1
+    Name: genres, Length: 923, dtype: int64
     
 
 
@@ -1040,18 +1120,18 @@ print(column_heads)
 genre_counts = df.iloc[:, 6:].sum()
 
 # Create a histogram of genre 
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(16, 10))
 genre_counts.plot(kind='bar')
 plt.xlabel('Genre')
 plt.ylabel('Frequency')
-plt.title('Histogram of Genres')
+plt.title('Histogram of Movie Genres')
 plt.xticks(rotation=45)
 plt.show()
 ```
 
 
     
-![png](output_18_0.png)
+![png](output_25_0.png)
     
 
 
